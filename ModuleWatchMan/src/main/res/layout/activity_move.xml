@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/move_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:id="@+id/move_position"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="90dp"
+        android:background="@drawable/position"
+        android:clickable="true"
+        android:onClick="onBackClick" />
+
+    <ImageButton
+        android:id="@+id/move_trajectory"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/move_position"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/trajectory"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="onTrajectory" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="clearInfo"
+        android:text="清楚 "
+        android:visibility="gone" />
+</RelativeLayout>

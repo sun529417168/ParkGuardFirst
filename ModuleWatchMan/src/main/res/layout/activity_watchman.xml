@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gary"
+    android:orientation="vertical">
+
+    <include layout="@layout/title" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:textColor="@color/colorWhite" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/watchMan_scan_text"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/my_scanning"
+                android:gravity="center"
+                android:text="已连接"
+                android:textColor="@color/colorWhite"
+                android:visibility="gone" />
+
+            <cn.com.watchman.weight.RadarView
+                android:id="@+id/watchMan_scan_radar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+              />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="3">
+
+            <TextView
+                android:id="@+id/tv_Title_Longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/tv_Title_Longitude"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_Title_Latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_Title_Longitude"
+                android:layout_alignStart="@+id/tv_Title_Longitude"
+                android:layout_below="@+id/tv_Title_Longitude"
+                android:layout_marginTop="10dp"
+                android:text="@string/tv_Title_Latitude"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_Title_Altitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_Title_Latitude"
+                android:layout_alignStart="@+id/tv_Title_Latitude"
+                android:layout_below="@+id/tv_Title_Latitude"
+                android:layout_marginTop="10dp"
+                android:text="@string/tv_Title_Altitude"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/watchMan_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_Title_Altitude"
+                android:layout_alignStart="@+id/tv_Title_Altitude"
+                android:layout_below="@+id/tv_Title_Altitude"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/watchMan_Longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tv_Title_Longitude"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/tv_Title_Longitude"
+                android:layout_toRightOf="@+id/tv_Title_Longitude"
+                android:text="00.000000"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/watchMan_Latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/tv_Title_Latitude"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/tv_Title_Latitude"
+                android:layout_toRightOf="@+id/tv_Title_Latitude"
+                android:text="00.000000"
+                android:textColor="@color/colorWhite" />
+            <!--精度-->
+            <TextView
+                android:id="@+id/watchMan_accuracy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tv_Title_Accuracy"
+                android:layout_alignBottom="@+id/tv_Title_Accuracy"
+                android:layout_toRightOf="@+id/tv_Title_Accuracy"
+                android:text="00.0"
+                android:textColor="@color/colorWhite" />
+            <!--海拔-->
+            <TextView
+                android:id="@+id/watchMan_altitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/watchMan_address"
+                android:layout_alignLeft="@+id/watchMan_Latitude"
+                android:layout_alignStart="@+id/watchMan_Latitude"
+                android:text="0"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_Title_Accuracy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/watchMan_address"
+                android:layout_toEndOf="@+id/watchMan_Latitude"
+                android:layout_toRightOf="@+id/watchMan_Latitude"
+                android:text="@string/tv_Title_Accuracy"
+                android:textColor="@color/colorWhite" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blueTwo">
+
+        <TextView
+            android:id="@+id/tv_content_GPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/watchMan_deviceId"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:text="连接状态：未连接"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/tv_Title_StatelliteNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_content_GPS"
+            android:layout_alignStart="@+id/tv_content_GPS"
+            android:layout_below="@+id/tv_content_GPS"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:text="卫星数量:"
+            android:textColor="@color/colorWhite"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/watchMan_find_satelliteNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_Title_StatelliteNum"
+            android:layout_alignBottom="@+id/tv_Title_StatelliteNum"
+            android:layout_toEndOf="@+id/tv_Title_StatelliteNum"
+            android:layout_toRightOf="@+id/tv_Title_StatelliteNum"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/new_main_ciShu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_content_GPS"
+            android:layout_alignBottom="@+id/tv_content_GPS"
+            android:layout_marginLeft="84dp"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/watchMan_find_satelliteNum"
+            android:layout_toRightOf="@+id/watchMan_find_satelliteNum"
+            android:text="上传次数:"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/watchMan_sendCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/new_main_ciShu"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/new_main_ciShu"
+            android:layout_toRightOf="@+id/new_main_ciShu"
+            android:text="0"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/watchMan_deviceId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_content_GPS"
+            android:layout_alignStart="@+id/tv_content_GPS"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/watchMan_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/watchMan_deviceId"
+            android:text="点击复制设备号"
+            android:textColor="@color/gray" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:textColor="@color/colorWhite" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/blueTwo"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="巡更人员:"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/person"
+            android:text=""
+            android:textColor="@color/white"
+            />
+        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/activity_main_menu">
+            <!--事件上报start-->
+            <LinearLayout
+                android:id="@+id/watchMan_EventReport"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/activity_main_top" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="巡更巡检"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <!--事件上报end-->
+            <!--地理位置start-->
+            <LinearLayout
+                android:id="@+id/watchMan_map"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/watchMan_center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/activity_main_right" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地理位置"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <!--地理位置end-->
+
+            <!--地理位置start-->
+            <LinearLayout
+                android:id="@+id/watchMan_code"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/watchMan_center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/activity_main_left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="扫一扫"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <!--地理位置end-->
+
+            <!--巡更统计start-->
+            <LinearLayout
+                android:id="@+id/watchMan_statistics"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/watchMan_center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/activity_main_bottom" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上传统计"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+            <!--巡更统计end-->
+
+
+            <ImageButton
+                android:id="@+id/watchMan_center"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/activity_main_start" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <include
+        layout="@layout/basicmap_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp" />
+</LinearLayout>

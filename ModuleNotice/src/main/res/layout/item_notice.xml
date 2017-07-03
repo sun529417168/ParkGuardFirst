@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <!--左边图片start-->
+        <LinearLayout
+            android:id="@+id/item_notice_picture"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/item_notice_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <!--左边图片end-->
+        <!--左边日历start-->
+        <!--说明：默认是没有日历的，在没有图片的情况下才会显示日历-->
+        <RelativeLayout
+            android:id="@+id/item_notice_calendar"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="4"
+            android:background="@mipmap/calendar_background"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/notice_year_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="13sp"
+                android:text="2017年3月"
+                android:textColor="#EA1E13" />
+
+            <TextView
+                android:id="@+id/notice_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:textSize="13sp"
+                android:text="星期二"
+                android:textColor="#EA1E13" />
+
+            <TextView
+                android:id="@+id/notice_lunar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="农历四月初一"
+                android:textSize="11sp"
+                android:paddingBottom="2dp"
+                android:textColor="#EA1E13" />
+
+            <TextView
+                android:id="@+id/notice_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="20"
+                android:textColor="#EA1E13"
+                android:textSize="13sp"
+                android:typeface="serif" />
+        </RelativeLayout>
+        <!--左边日历end-->
+        <!--右边的数据start-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="7"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/item_notice_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#555555"
+                android:layout_gravity="right"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/item_notice_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:layout_marginTop="5dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/item_notice_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#555555"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:textSize="15sp"
+                android:lines="1" />
+
+            <TextView
+                android:id="@+id/item_notice_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#555555"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="right"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <!--右边的数据end-->
+
+    </LinearLayout>
+</LinearLayout>
