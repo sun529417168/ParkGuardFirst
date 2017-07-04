@@ -24,7 +24,11 @@ android {
         abortOnError false
     }
 }
-
+repositories {
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
+}
 dependencies {
     println IsBuildMudle.toBoolean()
     if (!IsBuildMudle.toBoolean()) {

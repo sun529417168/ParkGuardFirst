@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +16,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.sdk.android.push.CloudPushService;
-import com.alibaba.sdk.android.push.CommonCallback;
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.linked.erfli.library.utils.DataCleanManager;
 
 import cn.com.task.R;
-import cn.com.task.TaskLoginActivity;
 import cn.com.task.interfaces.GetPhotoTypeInterface;
 import cn.com.task.interfaces.SexChooseInterface;
 
@@ -193,46 +188,6 @@ public class DialogUtils {
         dialog.show();
     }
 
-    /**
-     * 方法名：exit
-     * 功    能：退出功能
-     * 参    数：Context context
-     * 返回值：无
-     */
-    public static void exit(final Activity activity) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
-        dialog.setTitle("提示信息");
-        dialog.setMessage("确定要退出么？");
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                CloudPushService cloudPushService = PushServiceFactory.getCloudPushService();
-                cloudPushService.unbindAccount(new CommonCallback() {
-                    @Override
-                    public void onSuccess(String s) {
-                        Log.i("unInitUserName", "bind account success");
-                    }
-
-                    @Override
-                    public void onFailed(String errorCode, String errorMessage) {
-                        Log.i("unInitUserNameError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
-                    }
-                });
-                Intent in = new Intent(activity, TaskLoginActivity.class);
-                activity.startActivity(in);
-                activity.finish();
-            }
-        });
-        dialog.setNeutralButton("取消",
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        arg0.dismiss();
-                    }
-                });
-        dialog.show();
-    }
 
 
     /**

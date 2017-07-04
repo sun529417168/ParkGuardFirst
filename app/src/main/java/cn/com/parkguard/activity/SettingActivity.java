@@ -14,10 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import cn.com.parkguard.R;
-import cn.com.parkguard.Utils.DialogUtils;
-import cn.com.parkguard.Utils.MyRequest;
 import cn.com.parkguard.bean.PersonBean;
 import cn.com.parkguard.interfaces.PersonInfoInterface;
+import cn.com.parkguard.utils.DialogUtils;
+import cn.com.parkguard.utils.MyRequest;
 
 /**
  * 文件名：SettingActivity

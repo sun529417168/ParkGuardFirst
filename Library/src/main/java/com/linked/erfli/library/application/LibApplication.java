@@ -50,9 +50,8 @@ public class LibApplication extends Application {
         locationService = new LocationService(getApplicationContext());
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
-
-        context = getApplicationContext();
         initCloudChannel(this);
+        context = getApplicationContext();
         EventBus.getDefault().register(this);
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.logo)//加载开始默认的图片
@@ -76,7 +75,6 @@ public class LibApplication extends Application {
         return context;
     }
 
-
     /**
      * 初始化云推送通道
      *
@@ -84,20 +82,23 @@ public class LibApplication extends Application {
      */
     private void initCloudChannel(Context applicationContext) {
         PushServiceFactory.init(applicationContext);
-        CloudPushService pushService = PushServiceFactory.getCloudPushService();
-        String deviceId = PushServiceFactory.getCloudPushService().getDeviceId();
-        Log.i("DeviceId:", deviceId);
+        final CloudPushService pushService = PushServiceFactory.getCloudPushService();
         pushService.register(applicationContext, new CommonCallback() {
             @Override
             public void onSuccess(String response) {
-                Log.d(TAG, "init cloudchannel success");
+                Log.i(TAG, "init cloudchannel success");
             }
 
             @Override
             public void onFailed(String errorCode, String errorMessage) {
-                Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
+                Log.e(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
             }
         });
+
+        // 初始化小米通道，自动判断是否支持小米系统推送，如不支持会跳过注册
+//        MiPushRegister.register(applicationContext, "小米AppID", "小米AppKey");
+        // 初始化华为通道，自动判断是否支持华为系统推送，如不支持会跳过注册
+//        HuaWeiRegister.register(applicationContext);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

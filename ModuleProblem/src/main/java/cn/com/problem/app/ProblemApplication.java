@@ -2,11 +2,7 @@ package cn.com.problem.app;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
-import com.alibaba.sdk.android.push.CloudPushService;
-import com.alibaba.sdk.android.push.CommonCallback;
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.linked.erfli.library.utils.NetWorkUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -30,7 +26,6 @@ public class ProblemApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        initCloudChannel(this);
         initData();
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.login_logo)//加载开始默认的图片
@@ -58,26 +53,5 @@ public class ProblemApplication extends Application {
         return context;
     }
 
-    /**
-     * 初始化云推送通道
-     *
-     * @param applicationContext
-     */
-    private void initCloudChannel(Context applicationContext) {
-        PushServiceFactory.init(applicationContext);
-        CloudPushService pushService = PushServiceFactory.getCloudPushService();
-        String deviceId = PushServiceFactory.getCloudPushService().getDeviceId();
-        Log.i("DeviceId:", deviceId);
-        pushService.register(applicationContext, new CommonCallback() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d(TAG, "init cloudchannel success");
-            }
-            @Override
-            public void onFailed(String errorCode, String errorMessage) {
-                Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
-            }
-        });
-    }
 
 }

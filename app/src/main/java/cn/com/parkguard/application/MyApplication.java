@@ -7,9 +7,6 @@ import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import com.alibaba.sdk.android.push.CloudPushService;
-import com.alibaba.sdk.android.push.CommonCallback;
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.baidu.mapapi.SDKInitializer;
 import com.github.mzule.activityrouter.annotation.Modules;
 import com.linked.erfli.library.service.LocationService;
@@ -69,7 +66,6 @@ public class MyApplication extends Application {
         context = getApplicationContext();
         mInstance = this;
         initScreenSize();
-        initCloudChannel(this);
         EventBus.getDefault().register(this);
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.logo)//加载开始默认的图片
@@ -93,28 +89,6 @@ public class MyApplication extends Application {
         return mInstance;
     }
 
-    /**
-     * 初始化云推送通道
-     *
-     * @param applicationContext
-     */
-    private void initCloudChannel(Context applicationContext) {
-        PushServiceFactory.init(applicationContext);
-        CloudPushService pushService = PushServiceFactory.getCloudPushService();
-        String deviceId = PushServiceFactory.getCloudPushService().getDeviceId();
-        Log.i("DeviceId:", deviceId);
-        pushService.register(applicationContext, new CommonCallback() {
-            @Override
-            public void onSuccess(String response) {
-                Log.d(TAG, "init cloudchannel success");
-            }
-
-            @Override
-            public void onFailed(String errorCode, String errorMessage) {
-                Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
-            }
-        });
-    }
 
     /**
      * 初始化当前设备屏幕宽高

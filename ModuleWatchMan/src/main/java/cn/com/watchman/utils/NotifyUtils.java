@@ -20,9 +20,7 @@ import cn.com.watchman.R;
 import cn.com.watchman.activity.WatchMainActivity;
 import cn.com.watchman.interfaces.PlayingNotification;
 import cn.com.watchman.service.GPSService;
-
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.alibaba.sdk.android.ams.common.global.AmsGlobalHolder.getPackageName;
 
 /**
  * 文件名：NotifyUtils
@@ -84,7 +82,7 @@ public class NotifyUtils implements PlayingNotification {
 
     public void showButtonNotify(int count) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity);
-        mRemoteViews = new RemoteViews(getPackageName(), R.layout.view_custom_button);
+        mRemoteViews = new RemoteViews(activity.getPackageName(), R.layout.view_custom_button);
         mRemoteViews.setImageViewResource(R.id.custom_song_icon, R.mipmap.watch_logo);
         //API3.0 以上的时候显示按钮，否则消失
         mRemoteViews.setTextViewText(R.id.tv_custom_song_singer, "当前上传次数:" + count + "次");

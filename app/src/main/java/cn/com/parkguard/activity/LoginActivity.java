@@ -7,26 +7,21 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.alibaba.sdk.android.push.CloudPushService;
-import com.alibaba.sdk.android.push.CommonCallback;
-import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.linked.erfli.library.base.BaseActivity;
 import com.linked.erfli.library.base.MyTitle;
 import com.linked.erfli.library.utils.SharedUtil;
 import com.linked.erfli.library.utils.ToastUtil;
 
 import cn.com.parkguard.R;
-import cn.com.parkguard.Utils.MyRequest;
 import cn.com.parkguard.bean.MyLoginBean;
 import cn.com.parkguard.interfaces.LoginInterface;
-
+import cn.com.parkguard.utils.MyRequest;
 
 
 /**
@@ -202,22 +197,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    private void initPersonIdAli() {
-        while (SharedUtil.getBoolean(this, "isSuccess", false)) {
-            CloudPushService pushService = PushServiceFactory.getCloudPushService();
-            pushService.bindAccount(SharedUtil.getString(this, "personId"), new CommonCallback() {
-                @Override
-                public void onSuccess(String s) {
-                    SharedUtil.setBoolean(LoginActivity.this, "isSuccess", false);
-                    Log.i("InitPersonId", "bind account success");
-                }
-
-                @Override
-                public void onFailed(String errorCode, String errorMessage) {
-                    Log.i("InitPersonIdError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
-                }
-            });
-        }
-    }
+//    private void initPersonIdAli() {
+//        while (SharedUtil.getBoolean(this, "isSuccess", false)) {
+//            CloudPushService pushService = PushServiceFactory.getCloudPushService();
+//            pushService.bindAccount(SharedUtil.getString(this, "personId"), new CommonCallback() {
+//                @Override
+//                public void onSuccess(String s) {
+//                    SharedUtil.setBoolean(LoginActivity.this, "isSuccess", false);
+//                    Log.i("InitPersonId", "bind account success");
+//                }
+//
+//                @Override
+//                public void onFailed(String errorCode, String errorMessage) {
+//                    Log.i("InitPersonIdError", "bind account fail" + "err:" + errorCode + " - message:" + errorMessage);
+//                }
+//            });
+//        }
+//    }
 
 }

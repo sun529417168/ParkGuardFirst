@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/blue</item>
     </style>
 
+    <style name="WelComeAppTheme" parent="android:Theme.Translucent.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/welcomes</item>
+    </style>
 </resources>
