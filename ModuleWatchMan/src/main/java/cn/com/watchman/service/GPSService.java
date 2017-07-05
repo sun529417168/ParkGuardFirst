@@ -11,6 +11,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.linked.erfli.library.utils.MyUtils;
 import com.linked.erfli.library.utils.SharedUtil;
 import com.linked.erfli.library.utils.ToastUtil;
 
@@ -43,6 +44,10 @@ public class GPSService extends Service {
     private Intent intent;
     private int currentCount = 0, totalCount;
     protected List<DinatesBean> dinatesList = new ArrayList<>();
+    private long[] time = {0, 10, 30, 1 * 60, 5 * 60, 10 * 60};
+    private int[] compareWork = {100, 200, 400, 800, 1500};
+    private int[] compareBic = {300, 600, 1200, 2400, 4800};
+    private int[] compareCar = {500, 1500, 3000, 6000, 30000};
 
 
     @Override
@@ -79,7 +84,7 @@ public class GPSService extends Service {
         // 地址信息
         locationClientOption.setNeedAddress(true);
         // 每10秒定位一次
-        locationClientOption.setInterval(10 * 1000);
+        locationClientOption.setInterval(20 * 1000);
         locationClientContinue.setLocationOption(locationClientOption);
         locationClientContinue.setLocationListener(locationContinueListener);
         locationClientContinue.startLocation();
@@ -91,26 +96,59 @@ public class GPSService extends Service {
     AMapLocationListener locationContinueListener = new AMapLocationListener() {
         @Override
         public void onLocationChanged(AMapLocation location) {
-            gpsBean = new GPSBean(location.getLongitude(), location.getLatitude());
-            if ((int) location.getLongitude() != 0 || (int) location.getLatitude() != 0) {
-                if (location != null && Double.parseDouble(String.valueOf(location.getAccuracy())) > 0 && Double.parseDouble(String.valueOf(location.getAccuracy())) < 25) {
-                    if (Distance.isCompareGD(GPSService.this, gpsBean)) {
-                        MyRequest.gpsRequest(GPSService.this, gpsBean);
-                        currentCount++;
-                        totalCount = SharedUtil.getInteger(getApplicationContext(), "totalCount", 0) + 1;
-                        SharedUtil.setInteger(getApplicationContext(), "totalCount", totalCount);
-                        intent.putExtra("currentCount", currentCount);
-                        intent.putExtra("totalCount", totalCount);
-                        sendBroadcast(intent);
-                        dinatesDao.insert(new DinatesBean(location.getLongitude(), location.getLatitude(), System.currentTimeMillis() / 1000));
-                        SharedUtil.setString(GPSService.this, "longitude", String.valueOf(location.getLongitude()));
-                        SharedUtil.setString(GPSService.this, "latitude", String.valueOf(location.getLatitude()));
-                    }
+            if (location != null && (int) location.getLongitude() != 0 || (int) location.getLatitude() != 0) {
+                ToastUtil.show(GPSService.this, "定位成功走方法喽");
+//                SharedUtil.getInteger(GPSService.this, "GPSType", 0)
+                switch (0) {
+                    case 0://行走状态
+                        ToastUtil.show(GPSService.this, "行走状态开始走喽");
+                        for (int i = 0; i < compareWork.length; i++) {//用循环模式，把约束条件放在数组里边，循环判断条件是否成立，以下也是如此
+                            if (Distance.isCompareTime(GPSService.this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(GPSService.this, location, compareWork[i])) {
+                                sendMessage(location);
+                                break;
+                            }
+                        }
+                        break;
+                    case 1://电车状态
+                        ToastUtil.show(GPSService.this, "电车状态开始走喽");
+                        for (int i = 0; i < compareBic.length; i++) {
+                            if (Distance.isCompareTime(GPSService.this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(GPSService.this, location, compareWork[i])) {
+                                sendMessage(location);
+                                break;
+                            }
+                        }
+                        break;
+                    case 2://开车状态
+                        ToastUtil.show(GPSService.this, "开车状态开始走喽");
+                        for (int i = 0; i < compareCar.length; i++) {
+                            if (Distance.isCompareTime(GPSService.this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(GPSService.this, location, compareWork[i])) {
+                                sendMessage(location);
+                                break;
+                            }
+                        }
+                        break;
                 }
             }
         }
     };
 
+    private void sendMessage(AMapLocation location) {
+        gpsBean = new GPSBean(location.getLongitude(), location.getLatitude());
+        MyRequest.gpsRequest(GPSService.this, gpsBean);
+        currentCount++;
+        totalCount = SharedUtil.getInteger(getApplicationContext(), "totalCount", 0) + 1;
+        SharedUtil.setInteger(getApplicationContext(), "totalCount", totalCount);
+        intent.putExtra("currentCount", currentCount);
+        intent.putExtra("totalCount", totalCount);
+        sendBroadcast(intent);
+        if (String.valueOf(location.getLatitude()).length() > 9 || String.valueOf(location.getLongitude()).length() > 10) {
+            dinatesDao.insert(new DinatesBean(location.getLongitude(), location.getLatitude(), System.currentTimeMillis() / 1000));
+            SharedUtil.setString(GPSService.this, "longitude", String.valueOf(location.getLongitude()));
+            SharedUtil.setString(GPSService.this, "latitude", String.valueOf(location.getLatitude()));
+            SharedUtil.setLong(GPSService.this, "compareTime", System.currentTimeMillis() / 1000);
+        }
+        ToastUtil.show(GPSService.this, "合法数据，成功上传");
+    }
 
     Handler mHandler = new Handler() {
         @Override

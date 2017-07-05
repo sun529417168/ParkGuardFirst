@@ -166,4 +166,46 @@ public class Distance {
             return false;
         }
     }
+
+
+    /**
+     * 方法名：isCompareByGD
+     * 功    能：判断是否在指定的范围之内,高德的判断方法
+     * 参    数：Context activity, AMapLocation location, int distance
+     * 返回值：boolean
+     */
+    public static boolean isCompareByGD(Context activity, AMapLocation location, int distance) {
+        LatLng start = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng end = new LatLng(TextUtils.isEmpty(SharedUtil.getString(activity, "latitude")) ? 0 : Double.parseDouble(SharedUtil.getString(activity, "latitude")), TextUtils.isEmpty(SharedUtil.getString(activity, "longitude")) ? 0 : Double.parseDouble(SharedUtil.getString(activity, "longitude")));
+        float retval = AMapUtils.calculateLineDistance(start, end);
+        Log.i("两者相减的距离是", "经纬度：" + location.getLatitude() + "===" + location.getLongitude() + "\n" + "本地记录的：" + SharedUtil.getString(activity, "latitude") + "==" + SharedUtil.getString(activity, "longitude") + "\n" + "相减的距离：" + retval);
+        if (TextUtils.isEmpty(SharedUtil.getString(activity, "latitude")) || TextUtils.isEmpty(SharedUtil.getString(activity, "longitude"))) {
+            return true;
+        } else if (retval < distance) {
+            Log.i("是否在正确范围内", "在正确范围内");
+            return true;
+        } else {
+            Log.i("是否在正确范围内", "不在正确范围内");
+            return false;
+        }
+    }
+
+    /**
+     * 方法名：isCompareTime
+     * 功    能：判断是否在指定的时间范围之内
+     * 参    数：Context context, long nowTime, long start, long end
+     * 返回值：boolean
+     */
+    public static boolean isCompareTime(Context context, long nowTime, long start, long end) {
+        boolean isFlag = false;
+        long oldTime = SharedUtil.getLong(context, "compareTime", 0);
+        long poor = nowTime - oldTime;
+        Log.i("是在哪个时间段都的呢？", String.valueOf(poor));
+        if (poor > 10 * 60) {
+            isFlag = true;
+        } else if (poor >= start && poor < end) {
+            isFlag = true;
+        }
+        return isFlag;
+    }
 }
