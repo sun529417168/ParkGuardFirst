@@ -113,7 +113,7 @@ public class WatchMainActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1) {
-                tv_sendCount.setText("" + msg.arg1);
+                tv_sendCount.setText("" + msg.arg1 + "/" + SharedUtil.getInteger(WatchMainActivity.this, "totalCount", 0));
                 notifyUtils.showButtonNotify(msg.arg1);
             }
         }
@@ -204,7 +204,7 @@ public class WatchMainActivity extends BaseActivity implements View.OnClickListe
             suspendBtn.setBackgroundResource(R.drawable.activity_main_stop);
             scan_radar.setSearching(true);//开始扫描
             locationService.start();
-            tv_sendCount.setText("" + SharedUtil.getInteger(this, "currentCount", 0));
+            tv_sendCount.setText(SharedUtil.getInteger(this, "currentCount", 0) + "/" + SharedUtil.getInteger(this, "totalCount", 0));
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(MyLocationListener.GPSTYPE);
             registerReceiver(msgReceiver, intentFilter);
@@ -248,7 +248,7 @@ public class WatchMainActivity extends BaseActivity implements View.OnClickListe
                 isStart = true;
                 scan_radar.setSearching(true);//开始扫描
                 locationService.start();
-                tv_sendCount.setText("0");
+                tv_sendCount.setText("0" + "/" + SharedUtil.getInteger(this, "totalCount", 0));
                 IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction(MyLocationListener.GPSTYPE);
                 registerReceiver(msgReceiver, intentFilter);
@@ -458,6 +458,6 @@ public class WatchMainActivity extends BaseActivity implements View.OnClickListe
             startService(startIntent);
         }
     }
-    
-    
+
+
 }
