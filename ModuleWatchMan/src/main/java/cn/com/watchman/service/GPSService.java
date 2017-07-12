@@ -83,7 +83,7 @@ public class GPSService extends Service {
         AMapLocationClientOption locationClientOption = new AMapLocationClientOption();
         // 地址信息
         locationClientOption.setNeedAddress(true);
-        // 每10秒定位一次
+        // 每20秒定位一次
         locationClientOption.setInterval(20 * 1000);
         locationClientContinue.setLocationOption(locationClientOption);
         locationClientContinue.setLocationListener(locationContinueListener);
@@ -97,11 +97,8 @@ public class GPSService extends Service {
         @Override
         public void onLocationChanged(AMapLocation location) {
             if (location != null && (int) location.getLongitude() != 0 || (int) location.getLatitude() != 0) {
-                ToastUtil.show(GPSService.this, "定位成功走方法喽");
-//                SharedUtil.getInteger(GPSService.this, "GPSType", 0)
                 switch (0) {
                     case 0://行走状态
-                        ToastUtil.show(GPSService.this, "行走状态开始走喽");
                         for (int i = 0; i < compareWork.length; i++) {//用循环模式，把约束条件放在数组里边，循环判断条件是否成立，以下也是如此
                             if (Distance.isCompareTime(GPSService.this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(GPSService.this, location, compareWork[i])) {
                                 sendMessage(location);
@@ -110,7 +107,6 @@ public class GPSService extends Service {
                         }
                         break;
                     case 1://电车状态
-                        ToastUtil.show(GPSService.this, "电车状态开始走喽");
                         for (int i = 0; i < compareBic.length; i++) {
                             if (Distance.isCompareTime(GPSService.this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(GPSService.this, location, compareWork[i])) {
                                 sendMessage(location);
@@ -119,7 +115,6 @@ public class GPSService extends Service {
                         }
                         break;
                     case 2://开车状态
-                        ToastUtil.show(GPSService.this, "开车状态开始走喽");
                         for (int i = 0; i < compareCar.length; i++) {
                             if (Distance.isCompareTime(GPSService.this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(GPSService.this, location, compareWork[i])) {
                                 sendMessage(location);
@@ -147,7 +142,6 @@ public class GPSService extends Service {
             SharedUtil.setString(GPSService.this, "latitude", String.valueOf(location.getLatitude()));
             SharedUtil.setLong(GPSService.this, "compareTime", System.currentTimeMillis() / 1000);
         }
-        ToastUtil.show(GPSService.this, "合法数据，成功上传");
     }
 
     Handler mHandler = new Handler() {

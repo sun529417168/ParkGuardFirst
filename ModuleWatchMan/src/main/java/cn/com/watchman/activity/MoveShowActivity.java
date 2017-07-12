@@ -1,5 +1,6 @@
 package cn.com.watchman.activity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import cn.com.watchman.R;
 import cn.com.watchman.bean.DinatesBean;
 import cn.com.watchman.bean.DinatesDaoImpl;
 import cn.com.watchman.bean.GPSBean;
+import cn.com.watchman.service.GPSService;
 import cn.com.watchman.utils.Distance;
 import cn.com.watchman.utils.MyRequest;
 import cn.com.watchman.utils.PointsUtil;
@@ -66,6 +68,12 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
     public static final String LOCATION_MARKER_FLAG = "mylocation";
     protected List<DinatesBean> dinatesList = new ArrayList<>();
     private boolean isSend = true;
+    private int currentCount = 0, totalCount;
+    private Intent intent;
+    private long[] time = {0, 10, 30, 1 * 60, 5 * 60, 10 * 60};
+    private int[] compareWork = {100, 200, 400, 800, 1500};
+    private int[] compareBic = {300, 600, 1200, 2400, 4800};
+    private int[] compareCar = {500, 1500, 3000, 6000, 30000};
 
     @Override
     protected void setView() {
@@ -285,16 +293,10 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
                 /**
                  * 下边的逻辑是用来写当在地图界面的时候还在行走状态，路线要实时画出来
                  */
-                GPSBean gpsBean = new GPSBean(aMapLocation.getLongitude(), aMapLocation.getLatitude());
-                if ((int) aMapLocation.getLongitude() != 0 || (int) aMapLocation.getLatitude() != 0) {
-                    if (Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) > 0 && Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) < 25) {
-                        if (Distance.isCompare(this, gpsBean)) {
-                            MyRequest.gpsRequest(this, gpsBean);
-                            dinatesDao.insert(new DinatesBean(aMapLocation.getLongitude(), aMapLocation.getLatitude(), System.currentTimeMillis() / 1000));
-                            SharedUtil.setString(this, "longitude", String.valueOf(aMapLocation.getLongitude()));
-                            SharedUtil.setString(this, "latitude", String.valueOf(aMapLocation.getLatitude()));
-                            trajectory();
-                        } 
+                for (int i = 0; i < compareWork.length; i++) {//用循环模式，把约束条件放在数组里边，循环判断条件是否成立，以下也是如此
+                    if (Distance.isCompareTime(this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(this, aMapLocation, compareWork[i])) {
+                        sendMessage(aMapLocation);
+                        break;
                     }
                 }
             }
@@ -304,7 +306,22 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
         }
     }
 
-
+    private void sendMessage(AMapLocation location) {
+        GPSBean gpsBean = new GPSBean(location.getLongitude(), location.getLatitude());
+        MyRequest.gpsRequest(this, gpsBean);
+        currentCount++;
+        totalCount = SharedUtil.getInteger(getApplicationContext(), "totalCount", 0) + 1;
+        SharedUtil.setInteger(getApplicationContext(), "totalCount", totalCount);
+        intent.putExtra("currentCount", currentCount);
+        intent.putExtra("totalCount", totalCount);
+        sendBroadcast(intent);
+        if (String.valueOf(location.getLatitude()).length() > 9 || String.valueOf(location.getLongitude()).length() > 10) {
+            dinatesDao.insert(new DinatesBean(location.getLongitude(), location.getLatitude(), System.currentTimeMillis() / 1000));
+            SharedUtil.setString(this, "longitude", String.valueOf(location.getLongitude()));
+            SharedUtil.setString(this, "latitude", String.valueOf(location.getLatitude()));
+            SharedUtil.setLong(this, "compareTime", System.currentTimeMillis() / 1000);
+        }
+    }
     /**
      * 激活定位
      */

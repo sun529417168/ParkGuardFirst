@@ -40,6 +40,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private TextView forgetPassword;
     private ImageButton pwdVisible, pwdDelete;
     private Boolean pwdIsVisible = false;
+    private String userName;
+    private Boolean islogin = false;
 
     @Override
     protected void setView() {
@@ -50,6 +52,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void setDate(Bundle savedInstanceState) {
         MyTitle.getInstance().setTitle(this, "登陆", PGApp, false);
+        userName = SharedUtil.getString(this, "userName");//获取用户名
+        islogin = SharedUtil.getBoolean(this, "isSuccess", false);
+        if (!TextUtils.isEmpty(userName) || islogin) {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        }
     }
 
     @Override

@@ -211,6 +211,8 @@ public class DialogUtils {
             public void onClick(DialogInterface arg0, int arg1) {
                 PGApp.changeTopOne();
                 SharedUtil.setBoolean(activity, "isSuccess", false);
+                SharedUtil.setString(activity, "userName", "");
+                SharedUtil.setString(activity, "passWord", "");
                 Intent in = new Intent(activity, LoginActivity.class);
                 activity.startActivity(in);
                 activity.finish();

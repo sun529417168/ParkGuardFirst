@@ -39,8 +39,7 @@
             android:value="b54763bb78b3363272cffc158296cd5a" />
 
         <activity
-            android:name=".activity.WelcomeActivity"
-            android:theme="@style/WelComeAppTheme">
+            android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,7 +65,7 @@
         </activity>
         <!--登陆界面-->
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.WelcomeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <!--主界面-->
