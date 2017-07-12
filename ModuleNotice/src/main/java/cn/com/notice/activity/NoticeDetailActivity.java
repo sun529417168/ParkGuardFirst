@@ -20,7 +20,7 @@ import com.linked.erfli.library.utils.ToastUtil;
 import java.util.ArrayList;
 
 import cn.com.notice.R;
-import cn.com.notice.Utils.MyRequest;
+import cn.com.notice.noticeutils.MyRequest;
 import cn.com.notice.adapter.DialogListViewAdapter;
 import cn.com.notice.adapter.NoticeDetalPhotoAdapter;
 import cn.com.notice.bean.NoticeDetailBean;

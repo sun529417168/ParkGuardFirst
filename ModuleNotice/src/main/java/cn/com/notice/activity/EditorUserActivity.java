@@ -18,8 +18,8 @@ import com.linked.erfli.library.utils.SharedUtil;
 import com.linked.erfli.library.utils.ToastUtil;
 
 import cn.com.notice.R;
-import cn.com.notice.Utils.DialogUtils;
-import cn.com.notice.Utils.MyRequest;
+import cn.com.notice.noticeutils.DialogUtils;
+import cn.com.notice.noticeutils.MyRequest;
 import cn.com.notice.bean.PersonBean;
 import cn.com.notice.interfaces.PersonInfoInterface;
 import cn.com.notice.interfaces.SexChooseInterface;
