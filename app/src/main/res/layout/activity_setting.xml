@@ -10,7 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mine_title">
+        android:layout_below="@+id/mine_title"
+        android:layout_marginBottom="40dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -179,13 +180,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gary" />
-            <!--版本号start-->
+            <!-- start 设置系统信任-->
+            <RelativeLayout
+                android:id="@+id/mine_system_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    style="@style/mine_userInfo"
+                    android:text="@string/mine_permission" />
+
+                <TextView
+                    android:id="@+id/mine_system_textView"
+                    style="@style/mine_userInfo"
+                    android:layout_marginRight="2dp"
+                    android:layout_toLeftOf="@+id/mine_system_right" />
+
+                <ImageView
+                    android:id="@+id/mine_system_right"
+                    android:layout_width="8dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/right" />
+            </RelativeLayout>
+
+
+            <!--end 设置系统信任-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gary" />
+            <!-- 版本号start -->
             <RelativeLayout
                 android:id="@+id/mine_version_Layout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp">
 
