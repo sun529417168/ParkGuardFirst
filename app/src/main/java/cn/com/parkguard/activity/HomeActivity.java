@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -210,7 +209,6 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     protected void onResume() {
         super.onResume();
         boolean serviceBool = MyServiceUtils.isServiceRunning(MyConstant.GPSSERVICE_CLASSNAME, HomeActivity.this);
-        Log.i("", "gps上传数据服务:" + serviceBool);
         findViewById(R.id.home_sendMessage).setVisibility(serviceBool ? View.VISIBLE : View.INVISIBLE);
     }
 }

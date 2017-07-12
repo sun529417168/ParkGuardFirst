@@ -5,6 +5,9 @@ android {
     buildToolsVersion "25.0.2"
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
+    dexOptions{
+        javaMaxHeapSize "4g"
+    }
     defaultConfig {
         applicationId "cn.com.parkguard"
         minSdkVersion 14
