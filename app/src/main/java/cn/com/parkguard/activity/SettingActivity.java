@@ -1,11 +1,5 @@
 package cn.com.parkguard.activity;
 
-import com.linked.erfli.library.base.BaseActivity;
-import com.linked.erfli.library.base.MyTitle;
-import com.linked.erfli.library.utils.DataCleanManager;
-import com.linked.erfli.library.utils.MyUtils;
-import com.linked.erfli.library.utils.SharedUtil;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +7,16 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.linked.erfli.library.base.BaseActivity;
+import com.linked.erfli.library.base.MyTitle;
+import com.linked.erfli.library.utils.DataCleanManager;
+import com.linked.erfli.library.utils.DialogUtils;
+import com.linked.erfli.library.utils.MyUtils;
+import com.linked.erfli.library.utils.SharedUtil;
+
 import cn.com.parkguard.R;
 import cn.com.parkguard.bean.PersonBean;
 import cn.com.parkguard.interfaces.PersonInfoInterface;
-import cn.com.parkguard.utils.DialogUtils;
 import cn.com.parkguard.utils.MyRequest;
 
 /**
@@ -33,7 +33,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      */
     private TextView nameText, phoneText, userIDText;
     private TextView userNameText, workNoText;
-    private RelativeLayout clearCacheLayout;
+    private RelativeLayout clearCacheLayout, mine_system_layout;
     private TextView cacheSize, version;
     private Button exitBtn;
 
@@ -71,6 +71,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         exitBtn.setOnClickListener(this);
         version = (TextView) findViewById(R.id.mine_version);
         version.setText(MyUtils.getAppVersionName(this));
+        mine_system_layout = (RelativeLayout) findViewById(R.id.mine_system_layout);
+        mine_system_layout.setOnClickListener(this);
     }
 
     @Override
@@ -84,7 +86,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 DialogUtils.clearData(this, cacheSize);
                 break;
             case R.id.exit_button:
-                DialogUtils.exit(PGApp, this);
+                cn.com.parkguard.utils.DialogUtils.exit(PGApp, this);
+                break;
+            case R.id.mine_system_layout:
+                DialogUtils.intentPermission(this);
                 break;
         }
     }
