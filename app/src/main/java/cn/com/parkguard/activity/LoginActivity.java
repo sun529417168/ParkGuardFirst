@@ -19,9 +19,9 @@ import com.linked.erfli.library.utils.SharedUtil;
 import com.linked.erfli.library.utils.ToastUtil;
 
 import cn.com.parkguard.R;
+import cn.com.parkguard.utils.MyRequest;
 import cn.com.parkguard.bean.MyLoginBean;
 import cn.com.parkguard.interfaces.LoginInterface;
-import cn.com.parkguard.utils.MyRequest;
 
 
 /**
@@ -38,8 +38,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private String username, password;
     private Button loginBtn;
     private TextView forgetPassword;
-    private ImageButton pwdVisible,pwdDelete;
-    private Boolean pwdIsVisible=false;
+    private ImageButton pwdVisible, pwdDelete;
+    private Boolean pwdIsVisible = false;
+
     @Override
     protected void setView() {
         setContentView(R.layout.activity_login);
@@ -61,8 +62,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginBtn.setOnClickListener(this);
         forgetPassword = (TextView) findViewById(R.id.login_forget_password);
         forgetPassword.setOnClickListener(this);
-        pwdVisible=(ImageButton)findViewById(R.id.password_visible);
-        pwdDelete=(ImageButton)findViewById(R.id.password_delete);
+        pwdVisible = (ImageButton) findViewById(R.id.password_visible);
+        pwdDelete = (ImageButton) findViewById(R.id.password_delete);
         pwdVisible.setOnClickListener(this);
         pwdDelete.setOnClickListener(this);
         pwdVisible.setVisibility(View.GONE);
@@ -82,8 +83,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             public void afterTextChanged(Editable s) {
                 pwdVisible.setVisibility(View.VISIBLE);
                 pwdDelete.setVisibility(View.VISIBLE);
-                if(s.length()==0)
-                {
+                if (s.length() == 0) {
                     pwdVisible.setVisibility(View.GONE);
                     pwdDelete.setVisibility(View.GONE);
                     hidePassword();
@@ -114,12 +114,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(intent);
                 break;
             case R.id.password_visible:
-                if(pwdIsVisible)
-                {
+                if (pwdIsVisible) {
                     hidePassword();
-                }
-                else
-                {
+                } else {
                     showPassword();
                 }
                 break;
@@ -127,8 +124,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 inputPassword.setText("");
                 pwdVisible.setVisibility(View.GONE);
                 pwdDelete.setVisibility(View.GONE);
-                if(pwdIsVisible)
-                {
+                if (pwdIsVisible) {
                     hidePassword();
                 }
                 break;
@@ -148,18 +144,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
         return flag;
     }
+
     public void hidePassword() {
-        inputPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         pwdVisible.setBackgroundResource(R.drawable.open);
         inputPassword.setSelection(inputPassword.getText().toString().trim().length());
-        pwdIsVisible=false;
+        pwdIsVisible = false;
     }
-    public void showPassword(){
+
+    public void showPassword() {
         inputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         pwdVisible.setBackgroundResource(R.drawable.close);
         inputPassword.setSelection(inputPassword.getText().toString().trim().length());
-        pwdIsVisible=true;
+        pwdIsVisible = true;
     }
+
     @Override
     public void login(final MyLoginBean userBean) {
         if (userBean.getPersonId() == 0) {
