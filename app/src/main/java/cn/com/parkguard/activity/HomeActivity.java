@@ -1,5 +1,7 @@
 package cn.com.parkguard.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +31,9 @@ import java.util.ArrayList;
 import cn.com.parkguard.R;
 import cn.com.parkguard.adapter.HomeAdapter;
 import cn.com.parkguard.bean.HomeBean;
+import cn.com.watchman.service.GPSService;
+import cn.com.watchman.utils.DialogUtils;
+import cn.com.watchman.utils.WMyUtils;
 
 /**
  * 文件名：HomeActivity
@@ -50,19 +55,18 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     protected void setView() {
         setContentView(R.layout.activity_main);
-
     }
 
     @Override
     protected void setDate(Bundle savedInstanceState) {
-        StatusBarUtils.ff(this,R.color.colorPrimary);
+        StatusBarUtils.ff(this, R.color.colorPrimary);
         MyTitle.getInstance().setTitle(this, "移动园区卫士", PGApp, false);
-        setting=(LinearLayout) findViewById(R.id.home_setter);
+        setting = (LinearLayout) findViewById(R.id.home_setter);
         setting.setVisibility(View.VISIBLE);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HomeActivity.this,SettingActivity.class);
+                Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -101,7 +105,42 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
         if (!MyServiceUtils.isServiceRunning(MyConstant.GPSSERVICE_CLASSNAME, HomeActivity.this)) {
             //Intent startIntent = new Intent(this, MyScoketService.class);
             //startService(startIntent);
+//            startServiceDialog();
+            if (!WMyUtils.isOpen(this)) {
+                DialogUtils.showGPSDialog(this);
+                Intent startIntent = new Intent(HomeActivity.this, GPSService.class);
+                startService(startIntent);
+            } else {
+                Intent startIntent = new Intent(HomeActivity.this, GPSService.class);
+                startService(startIntent);
+            }
+
         }
+    }
+
+    /**
+     * 启动服务
+     */
+    public void startServiceDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this);
+        dialog.setTitle("启动服务");
+        dialog.setMessage("是否要开启巡更服务?");
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent startIntent = new Intent(HomeActivity.this, GPSService.class);
+                startService(startIntent);
+            }
+        });
+        dialog.setNeutralButton("取消",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        dialog.show();
     }
 
     @Override
@@ -170,6 +209,7 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     protected void onResume() {
         super.onResume();
+
         boolean serviceBool = MyServiceUtils.isServiceRunning(MyConstant.GPSSERVICE_CLASSNAME, HomeActivity.this);
         Log.i("", "gps上传数据服务:" + serviceBool);
         findViewById(R.id.home_sendMessage).setVisibility(serviceBool ? View.VISIBLE : View.INVISIBLE);
