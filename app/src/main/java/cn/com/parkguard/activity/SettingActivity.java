@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.linked.erfli.library.base.BaseActivity;
 import com.linked.erfli.library.base.MyTitle;
 import com.linked.erfli.library.utils.DataCleanManager;
-import com.linked.erfli.library.utils.DialogUtils;
 import com.linked.erfli.library.utils.MyUtils;
 import com.linked.erfli.library.utils.SharedUtil;
 
 import cn.com.parkguard.R;
 import cn.com.parkguard.bean.PersonBean;
 import cn.com.parkguard.interfaces.PersonInfoInterface;
-import cn.com.parkguard.utils.MyRequest;
+import cn.com.parkguard.apputils.DialogUtils;
+import cn.com.parkguard.apputils.MyRequest;
 
 /**
  * 文件名：SettingActivity
@@ -86,7 +86,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 DialogUtils.clearData(this, cacheSize);
                 break;
             case R.id.exit_button:
-                cn.com.parkguard.utils.DialogUtils.exit(PGApp, this);
+                DialogUtils.exit(PGApp, this);
                 break;
             case R.id.mine_system_layout:
                 DialogUtils.intentPermission(this);

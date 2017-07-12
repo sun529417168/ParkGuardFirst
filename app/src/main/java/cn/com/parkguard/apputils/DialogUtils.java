@@ -1,4 +1,4 @@
-package cn.com.parkguard.utils;
+package cn.com.parkguard.apputils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,6 +6,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,6 +26,8 @@ import cn.com.parkguard.R;
 import cn.com.parkguard.activity.LoginActivity;
 import cn.com.parkguard.interfaces.GetPhotoTypeInterface;
 import cn.com.parkguard.interfaces.SexChooseInterface;
+
+import static com.alibaba.sdk.android.ams.common.global.AmsGlobalHolder.getPackageName;
 
 
 /**
@@ -307,6 +311,49 @@ public class DialogUtils {
         mDialog.show();
         mDialog.setContentView(root);
         mDialog.setCancelable(true);
+    }
+
+    /**
+     * 点击设置系统信任
+     *
+     * @param activity
+     */
+    public static void intentPermission(final Activity activity) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+        dialog.setTitle("提示信息");
+        dialog.setMessage("确定->权限管理->后台管理->允许后台运行");
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                getAppDetailSettingIntent(activity);
+            }
+        });
+        dialog.setNeutralButton("取消",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        arg0.dismiss();
+                    }
+                });
+        dialog.show();
+    }
+
+    /**
+     * 跳转到当前app权限设置页面
+     */
+    public static void getAppDetailSettingIntent(Activity activity) {
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+        }
+        activity.startActivity(localIntent);
     }
 
 }

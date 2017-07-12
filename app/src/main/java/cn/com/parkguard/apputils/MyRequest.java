@@ -1,4 +1,4 @@
-package cn.com.parkguard.utils;
+package cn.com.parkguard.apputils;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.com.parkguard.activity.HomeActivity;
+import cn.com.parkguard.apputils.DialogUtils;
 import cn.com.parkguard.bean.MyLoginBean;
 import cn.com.parkguard.bean.PersonBean;
 import cn.com.parkguard.interfaces.LoginInterface;

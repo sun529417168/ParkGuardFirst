@@ -21,8 +21,8 @@ import cn.com.parkguard.R;
 import cn.com.parkguard.bean.PersonBean;
 import cn.com.parkguard.interfaces.PersonInfoInterface;
 import cn.com.parkguard.interfaces.SexChooseInterface;
-import cn.com.parkguard.utils.DialogUtils;
-import cn.com.parkguard.utils.MyRequest;
+import cn.com.parkguard.apputils.DialogUtils;
+import cn.com.parkguard.apputils.MyRequest;
 
 
 /**

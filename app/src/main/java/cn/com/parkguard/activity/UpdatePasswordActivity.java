@@ -12,7 +12,7 @@ import com.linked.erfli.library.base.MyTitle;
 import com.linked.erfli.library.utils.ToastUtil;
 
 import cn.com.parkguard.R;
-import cn.com.parkguard.utils.MyRequest;
+import cn.com.parkguard.apputils.MyRequest;
 
 
 /**

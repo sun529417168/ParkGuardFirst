@@ -1,4 +1,4 @@
-package cn.com.parkguard.utils;
+package cn.com.parkguard.apputils;
 
 import android.content.Context;
 import android.content.Intent;

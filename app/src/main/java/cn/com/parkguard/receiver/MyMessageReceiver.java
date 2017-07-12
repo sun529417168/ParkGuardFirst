@@ -7,11 +7,10 @@ import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.MessageReceiver;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
-import com.linked.erfli.library.utils.ToastUtil;
 
 import java.util.Map;
 
-import cn.com.parkguard.utils.PullIntentUtil;
+import cn.com.parkguard.apputils.PullIntentUtil;
 
 /**
  * @author: 正纬

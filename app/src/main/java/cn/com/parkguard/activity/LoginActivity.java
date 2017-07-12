@@ -19,7 +19,7 @@ import com.linked.erfli.library.utils.SharedUtil;
 import com.linked.erfli.library.utils.ToastUtil;
 
 import cn.com.parkguard.R;
-import cn.com.parkguard.utils.MyRequest;
+import cn.com.parkguard.apputils.MyRequest;
 import cn.com.parkguard.bean.MyLoginBean;
 import cn.com.parkguard.interfaces.LoginInterface;
 
