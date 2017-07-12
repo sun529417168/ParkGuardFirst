@@ -209,7 +209,6 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     protected void onResume() {
         super.onResume();
-
         boolean serviceBool = MyServiceUtils.isServiceRunning(MyConstant.GPSSERVICE_CLASSNAME, HomeActivity.this);
         Log.i("", "gps上传数据服务:" + serviceBool);
         findViewById(R.id.home_sendMessage).setVisibility(serviceBool ? View.VISIBLE : View.INVISIBLE);
