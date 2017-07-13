@@ -8,30 +8,8 @@
         android:id="@+id/move_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/move_toggle"
         android:layout_weight="1" />
-
-    <ImageButton
-        android:id="@+id/move_position"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="90dp"
-        android:background="@drawable/position"
-        android:clickable="true"
-        android:onClick="onBackClick" />
-
-    <ImageButton
-        android:id="@+id/move_trajectory"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/move_position"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/trajectory"
-        android:clickable="true"
-        android:gravity="center"
-        android:onClick="onTrajectory" />
 
     <Button
         android:layout_width="wrap_content"
@@ -40,4 +18,14 @@
         android:onClick="clearInfo"
         android:text="清楚 "
         android:visibility="gone" />
+
+    <ToggleButton
+        android:id="@+id/move_toggle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:textOff="@string/move_off"
+        android:textOn="@string/move_on" />
 </RelativeLayout>

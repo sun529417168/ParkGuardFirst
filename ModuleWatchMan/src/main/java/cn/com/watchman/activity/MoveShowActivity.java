@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -74,6 +76,8 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
     private int[] compareWork = {100, 200, 400, 800, 1500};
     private int[] compareBic = {300, 600, 1200, 2400, 4800};
     private int[] compareCar = {500, 1500, 3000, 6000, 30000};
+    protected ToggleButton togBtn;
+
 
     @Override
     protected void setView() {
@@ -94,6 +98,23 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
         }
         //定位方法
         locate();
+        togBtn = (ToggleButton) findViewById(R.id.move_toggle);
+        togBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mListener = null;
+                    if (mlocationClient != null) {
+                        mlocationClient.stopLocation();
+                        mlocationClient.onDestroy();
+                    }
+                    mlocationClient = null;
+                    trajectory();
+                } else {
+                    locate();
+                }
+            }
+        });
     }
 
     public void clearInfo(View view) {
@@ -150,10 +171,6 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
         return points;
     }
 
-    public void onBackClick(View view) {//定位点击事件
-        locate();
-    }
-
     /**
      * 定位方法
      */
@@ -166,15 +183,6 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
 
     }
 
-    public void onTrajectory(View view) {//轨迹点击事件
-        mListener = null;
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-            mlocationClient.onDestroy();
-        }
-        mlocationClient = null;
-        trajectory();
-    }
 
     /**
      * 轨迹方法
@@ -197,8 +205,6 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
                 isSend = false;
                 initMarker();
             }
-        } else {
-            findViewById(R.id.move_trajectory).setVisibility(View.GONE);
         }
     }
 
@@ -293,10 +299,16 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
                 /**
                  * 下边的逻辑是用来写当在地图界面的时候还在行走状态，路线要实时画出来
                  */
-                for (int i = 0; i < compareWork.length; i++) {//用循环模式，把约束条件放在数组里边，循环判断条件是否成立，以下也是如此
-                    if (Distance.isCompareTime(this, System.currentTimeMillis() / 1000, time[i], time[i + 1]) && Distance.isCompareByGD(this, aMapLocation, compareWork[i])) {
-                        sendMessage(aMapLocation);
-                        break;
+                GPSBean gpsBean = new GPSBean(aMapLocation.getLongitude(), aMapLocation.getLatitude());
+                if ((int) aMapLocation.getLongitude() != 0 || (int) aMapLocation.getLatitude() != 0) {
+                    if (Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) > 0 && Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) < 25) {
+                        if (Distance.isCompare(this, gpsBean)) {
+                            MyRequest.gpsRequest(this, gpsBean);
+                            dinatesDao.insert(new DinatesBean(aMapLocation.getLongitude(), aMapLocation.getLatitude(), System.currentTimeMillis() / 1000));
+                            SharedUtil.setString(this, "longitude", String.valueOf(aMapLocation.getLongitude()));
+                            SharedUtil.setString(this, "latitude", String.valueOf(aMapLocation.getLatitude()));
+                            trajectory();
+                        }
                     }
                 }
             }
@@ -320,8 +332,10 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
             SharedUtil.setString(this, "longitude", String.valueOf(location.getLongitude()));
             SharedUtil.setString(this, "latitude", String.valueOf(location.getLatitude()));
             SharedUtil.setLong(this, "compareTime", System.currentTimeMillis() / 1000);
+            trajectory();
         }
     }
+
     /**
      * 激活定位
      */

@@ -34,7 +34,13 @@ public class MarkerActivity extends MoveShowActivity {
     protected void initMarker() {
         if (dinatesList.size() > 0) {
             markerList.add(dinatesList.get(0));
-            markerList.add(dinatesList.get(dinatesList.size() - 1));
+            long time = dinatesList.get(0).getTime() + 3 * 60;
+            for (DinatesBean bean : dinatesList) {
+                if (bean.getTime() > time || bean.getTime() == time) {
+                    markerList.add(bean);
+                    time = bean.getTime() + 3 * 60;
+                }
+            }
             poiOverlay = new ViewPoiOverlay(aMap, markerList);
             poiOverlay.removeFromMap();
             poiOverlay.addToMap();

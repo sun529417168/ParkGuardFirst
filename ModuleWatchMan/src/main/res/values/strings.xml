@@ -208,4 +208,9 @@
 
     <string name="loc_failed">定位失败</string>
     <string name="font_type">微软雅黑</string>
+    
+    
+    <string name="move_on">回到当前位置</string>
+    <string name="move_off">查看全览</string>
+    
 </resources>
