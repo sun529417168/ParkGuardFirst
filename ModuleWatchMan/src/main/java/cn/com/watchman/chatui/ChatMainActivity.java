@@ -540,7 +540,6 @@ public class ChatMainActivity extends AppCompatActivity implements PopupMenu.OnD
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("聊天页面onActivityResult方法:", "requestCode:" + requestCode + ",resultCode:" + resultCode);
         switch (requestCode) {
             case 2:
                 if (resultCode == RESULT_OK) {
