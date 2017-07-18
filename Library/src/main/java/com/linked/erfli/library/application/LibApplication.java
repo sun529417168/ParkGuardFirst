@@ -51,7 +51,7 @@ public class LibApplication extends Application {
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
         initCloudChannel(this);
-        context = getApplicationContext();
+        context = this;
         EventBus.getDefault().register(this);
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.logo)//加载开始默认的图片

@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.linked.erfli.library.broad.MyChatBroadcasReceiver;
 import com.linked.erfli.library.okhttps.OkHttpUtils;
 import com.linked.erfli.library.service.NetBroadcastReceiver;
 import com.linked.erfli.library.utils.ActivityCollector;
@@ -24,9 +25,10 @@ import com.linked.erfli.library.utils.PGActivityUtil;
  * 版    本：V1.0.0
  */
 
-public abstract class BaseActivity extends BaseCheckPermissionActivity implements NetBroadcastReceiver.NetEvevt {
+public abstract class BaseActivity extends BaseCheckPermissionActivity implements NetBroadcastReceiver.NetEvevt, MyChatBroadcasReceiver.MyBroadcasNotifyInterface {
     public PGActivityUtil PGApp;
     public static NetBroadcastReceiver.NetEvevt evevt;
+    public static MyChatBroadcasReceiver.MyBroadcasNotifyInterface notifyInterface;
     /**
      * 网络类型
      */
@@ -45,6 +47,7 @@ public abstract class BaseActivity extends BaseCheckPermissionActivity implement
         PGApp = PGActivityUtil.getInstance();
         PGApp.addActivity(this);
         evevt = this;
+        notifyInterface = this;
         inspectNet();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -170,6 +173,7 @@ public abstract class BaseActivity extends BaseCheckPermissionActivity implement
     protected void onResume() {
         super.onResume();
         evevt = this;
+        notifyInterface = this;
         inspectNet();
     }
 
@@ -180,4 +184,8 @@ public abstract class BaseActivity extends BaseCheckPermissionActivity implement
         ActivityCollector.removeActivity(this);
     }
 
+    @Override
+    public void onNetChanges(int i, int b) {
+
+    }
 }

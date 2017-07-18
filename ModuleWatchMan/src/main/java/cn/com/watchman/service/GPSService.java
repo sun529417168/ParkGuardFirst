@@ -11,9 +11,8 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.linked.erfli.library.utils.MyUtils;
+import com.linked.erfli.library.broad.MyChatBroadcasReceiver;
 import com.linked.erfli.library.utils.SharedUtil;
-import com.linked.erfli.library.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ import cn.com.watchman.utils.WMyUtils;
  * 时    间：2017.5.9
  * 版    本：V1.0.0
  */
-public class GPSService extends Service {
+public class GPSService extends Service implements MyChatBroadcasReceiver.MyBroadcasNotifyInterface {
     /**
      * 阿里的
      */
@@ -42,7 +41,7 @@ public class GPSService extends Service {
     private GPSBean gpsBean;
     private DinatesDaoImpl dinatesDao;
     private Intent intent;
-    private int currentCount = 0, totalCount;
+    private int currentCount = 0, totalCount = 0;
     protected List<DinatesBean> dinatesList = new ArrayList<>();
     private long[] time = {0, 10, 30, 1 * 60, 5 * 60, 10 * 60};
     private int[] compareWork = {100, 200, 400, 800, 1500};
@@ -132,10 +131,12 @@ public class GPSService extends Service {
         MyRequest.gpsRequest(GPSService.this, gpsBean);
         currentCount++;
         totalCount = SharedUtil.getInteger(getApplicationContext(), "totalCount", 0) + 1;
+        SharedUtil.setInteger(getApplicationContext(), "currentCount", currentCount);
         SharedUtil.setInteger(getApplicationContext(), "totalCount", totalCount);
         intent.putExtra("currentCount", currentCount);
         intent.putExtra("totalCount", totalCount);
         sendBroadcast(intent);
+//        MyChatBroadcasReceiver.register(this, this, intent);
         if (String.valueOf(location.getLatitude()).length() > 9 || String.valueOf(location.getLongitude()).length() > 10) {
             dinatesDao.insert(new DinatesBean(location.getLongitude(), location.getLatitude(), System.currentTimeMillis() / 1000));
             SharedUtil.setString(GPSService.this, "longitude", String.valueOf(location.getLongitude()));
@@ -166,6 +167,12 @@ public class GPSService extends Service {
             }
         }
     };
+
+
+    @Override
+    public void onNetChanges(int i, int b) {
+
+    }
 
     public class MyThread extends Thread {
         public void run() {

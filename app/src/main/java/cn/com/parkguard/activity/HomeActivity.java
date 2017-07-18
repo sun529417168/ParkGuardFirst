@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +34,9 @@ import cn.com.parkguard.adapter.HomeAdapter;
 import cn.com.parkguard.bean.HomeBean;
 import cn.com.watchman.service.GPSService;
 import cn.com.watchman.utils.DialogUtils;
+import cn.com.watchman.utils.NotifyUtils;
 import cn.com.watchman.utils.WMyUtils;
+
 
 /**
  * 文件名：HomeActivity
@@ -50,6 +54,7 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     private HomeAdapter homeAdapter;
     private long exitTime;//上一次按退出键时间
     private static final long TIME = 2000;//双击回退键间隔时间
+    private NotifyUtils notifyUtils;
 
     @Override
     protected void setView() {
@@ -60,6 +65,7 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
     protected void setDate(Bundle savedInstanceState) {
         StatusBarUtils.ff(this, R.color.colorPrimary);
         MyTitle.getInstance().setTitle(this, "移动园区卫士", PGApp, false);
+        notifyUtils = new NotifyUtils(this);
         setting = (LinearLayout) findViewById(R.id.home_setter);
         setting.setVisibility(View.VISIBLE);
         setting.setOnClickListener(new View.OnClickListener() {
@@ -109,11 +115,14 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
                 DialogUtils.showGPSDialog(this);
                 Intent startIntent = new Intent(HomeActivity.this, GPSService.class);
                 startService(startIntent);
+
             } else {
                 Intent startIntent = new Intent(HomeActivity.this, GPSService.class);
                 startService(startIntent);
             }
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                notifyUtils.showButtonNotify(0);
+            }
         }
     }
 
@@ -210,5 +219,11 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
         super.onResume();
         boolean serviceBool = MyServiceUtils.isServiceRunning(MyConstant.GPSSERVICE_CLASSNAME, HomeActivity.this);
         findViewById(R.id.home_sendMessage).setVisibility(serviceBool ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void onNetChanges(int i, int b) {
+        Log.i("onNetChanges", "homeActivity:" + i);
+        notifyUtils.showButtonNotify(i);
     }
 }

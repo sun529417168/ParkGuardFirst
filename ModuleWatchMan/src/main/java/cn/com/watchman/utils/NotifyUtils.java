@@ -20,6 +20,7 @@ import cn.com.watchman.R;
 import cn.com.watchman.activity.WatchMainActivity;
 import cn.com.watchman.interfaces.PlayingNotification;
 import cn.com.watchman.service.GPSService;
+
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
@@ -86,7 +87,7 @@ public class NotifyUtils implements PlayingNotification {
         mRemoteViews.setImageViewResource(R.id.custom_song_icon, R.mipmap.watch_logo);
         //API3.0 以上的时候显示按钮，否则消失
         mRemoteViews.setTextViewText(R.id.tv_custom_song_singer, "当前上传次数:" + count + "次");
-        mRemoteViews.setTextViewText(R.id.tv_day_send_count, "当天上传次数:"+SharedUtil.getInteger(activity.getApplicationContext(), "totalCount", 0) + "次");
+        mRemoteViews.setTextViewText(R.id.tv_day_send_count, "当天上传次数:" + SharedUtil.getInteger(activity.getApplicationContext(), "totalCount", 0) + "次");
         //如果版本号低于（3。0），那么不显示按钮
 //        if (getSystemVersion() <= 9) {
 //            mRemoteViews.setViewVisibility(R.id.ll_custom_button, View.GONE);
@@ -266,11 +267,24 @@ public class NotifyUtils implements PlayingNotification {
         return pendingIntent;
     }
 
-//    Intent[] makeIntentStack(Context context) {
+    //    Intent[] makeIntentStack(Context context) {
 //        Intent[] intents = new Intent[2];
 //        intents[0] = Intent.makeRestartActivityTask(new ComponentName(context, Home.class));
 //        intents[1] = new Intent(context, MainActivity.class);
 //        return intents;
 //    }
 
+//    public static void sendNotify(Context context, Class<? extends BaseActivity> target) {
+//        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        Notification n = new Notification(R.drawable.noti_title_icon, "收到新通知", System.currentTimeMillis());
+//        n.flags = Notification.FLAG_AUTO_CANCEL;
+//        n.defaults = Notification.DEFAULT_ALL;
+//
+//        Intent i = new Intent(context, target);
+//        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        PendingIntent pi = PendingIntent.getActivity(context, 0, i,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
+//        n.setLatestEventInfo(context, "收到新通知，请点击查看", "", pi);
+//        nm.notify(R.string.app_name, n);
+//    }
 }

@@ -83,7 +83,7 @@
             android:name=".utils.NotificationReceiver"
             android:process=":push" />
         <receiver android:name=".activity.WatchMainActivity$CountReceiver" />
-
+        <receiver android:name=".activity.WatchManStatisticsActivity$CountReceiver" />
         <!--chat 聊天页面-->
         <activity
             android:name=".chatui.ChatMainActivity"
