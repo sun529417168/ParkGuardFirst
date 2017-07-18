@@ -17,7 +17,7 @@
         android:clickable="true"
         android:onClick="clearInfo"
         android:text="清楚 "
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <ToggleButton
         android:id="@+id/move_toggle"

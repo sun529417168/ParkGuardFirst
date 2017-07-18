@@ -128,30 +128,13 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
 
     protected void addPolylineInPlayGround() {
         List<LatLng> list = readLatLngs();
-        List<Integer> colorList = new ArrayList<Integer>();
-        List<BitmapDescriptor> bitmapDescriptors = new ArrayList<BitmapDescriptor>();
-
-        int[] colors = new int[]{Color.argb(255, 0, 255, 0), Color.argb(255, 255, 255, 0), Color.argb(255, 255, 0, 0)};
-
-        //用一个数组来存放纹理
-        List<BitmapDescriptor> textureList = new ArrayList<BitmapDescriptor>();
-        textureList.add(BitmapDescriptorFactory.fromResource(R.drawable.custtexture));
-
-        List<Integer> texIndexList = new ArrayList<Integer>();
-        texIndexList.add(0);//对应上面的第0个纹理
-        texIndexList.add(1);
-        texIndexList.add(2);
-
-        Random random = new Random();
-        for (int i = 0; i < list.size(); i++) {
-            colorList.add(colors[random.nextInt(3)]);
-            bitmapDescriptors.add(textureList.get(0));
-
-        }
-
-        aMap.addPolyline(new PolylineOptions().setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture)) //setCustomTextureList(bitmapDescriptors)
-//				.setCustomTextureIndex(texIndexList)
+        List<LatLng> lists = readLatLng();
+        aMap.addPolyline(new PolylineOptions().setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture))
                 .addAll(list)
+                .useGradient(true)
+                .width(18));
+        aMap.addPolyline(new PolylineOptions().setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture_dotted))
+                .addAll(lists)
                 .useGradient(true)
                 .width(18));
     }
@@ -163,10 +146,29 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
      */
     protected List<LatLng> readLatLngs() {
         List<LatLng> points = new ArrayList<>();
+        for (int i = 0; i < dinatesList.size(); i++) {
+            if ((int) dinatesList.get(i).getLongitude() != 0 || (int) dinatesList.get(i).getLatitude() != 0) {
+                //这里判断前一个点位和目前点位时间差在一定范围画虚线
+                if ((i + 1) != dinatesList.size() && Math.abs(dinatesList.get(i).getTime() - dinatesList.get(i + 1).getTime()) <= 60) {
+                    points.add(new LatLng(dinatesList.get(i).getLatitude(), dinatesList.get(i).getLongitude()));
+                    points.add(new LatLng(dinatesList.get(i + 1).getLatitude(), dinatesList.get(i + 1).getLongitude()));
+                }
+            }
+        }
+        return points;
+    }
 
-        for (DinatesBean bean : dinatesList) {
-            if ((int) bean.getLongitude() != 0 || (int) bean.getLatitude() != 0)
-                points.add(new LatLng(bean.getLatitude(), bean.getLongitude()));
+    protected List<LatLng> readLatLng() {
+        List<LatLng> points = new ArrayList<>();
+        for (int i = 0; i < dinatesList.size(); i++) {
+            if ((int) dinatesList.get(i).getLongitude() != 0 || (int) dinatesList.get(i).getLatitude() != 0) {
+                //这里判断前一个点位和目前点位时间差在一定范围画虚线
+                if ((i + 1) != dinatesList.size() && Math.abs(dinatesList.get(i).getTime() - dinatesList.get(i + 1).getTime()) > 60) {
+                    points.add(new LatLng(dinatesList.get(i).getLatitude(), dinatesList.get(i).getLongitude()));
+                    points.add(new LatLng(dinatesList.get(i + 1).getLatitude(), dinatesList.get(i + 1).getLongitude()));
+                }
+            }
+
         }
         return points;
     }
@@ -180,17 +182,17 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
         if (mSensorHelper != null) {
             mSensorHelper.registerSensorListener();
         }
-
     }
-
 
     /**
      * 轨迹方法
      */
     protected void trajectory() {
         dinatesList = dinatesDao.rawQuery("select * from t_gps where time > ?", new String[]{WMyUtils.getTimesmorning()});
+
         if (dinatesList.size() > 0) {
             addPolylineInPlayGround();
+            //实线的方法
             List<LatLng> points = readLatLngs();
             LatLngBounds.Builder b = LatLngBounds.builder();
             for (int i = 0; i < points.size(); i++) {
@@ -201,6 +203,18 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
             LatLng drivePoint = points.get(0);
             Pair<Integer, LatLng> pair = PointsUtil.calShortestDistancePoint(points, drivePoint);
             points.set(pair.first, drivePoint);
+
+            //虚线的方法
+            List<LatLng> pointx = readLatLng();
+            LatLngBounds.Builder bx = LatLngBounds.builder();
+            for (int i = 0; i < pointx.size(); i++) {
+                bx.include(pointx.get(i));
+            }
+            LatLngBounds boundsx = bx.build();
+            aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsx, 100));
+            LatLng drivePointx = pointx.get(0);
+            Pair<Integer, LatLng> pairx = PointsUtil.calShortestDistancePoint(pointx, drivePointx);
+            pointx.set(pairx.first, drivePointx);
             if (isSend) {
                 isSend = false;
                 initMarker();
