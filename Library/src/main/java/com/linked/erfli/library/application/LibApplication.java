@@ -15,6 +15,8 @@ import com.github.mzule.activityrouter.annotation.Modules;
 import com.linked.erfli.library.R;
 import com.linked.erfli.library.service.LocationService;
 import com.linked.erfli.library.utils.EventPool;
+import com.linked.erfli.library.utils.MyUtils;
+import com.linked.erfli.library.utils.SharedUtil;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,17 +35,19 @@ import org.greenrobot.eventbus.ThreadMode;
  * 时    间：2016.12.30
  * 版    本：V1.0.0
  */
-@Modules({"app", "moduleTask", "moduleNotice", "moduleProblem", "moduleWatchMan", "moduleMonitor"})
+@Modules({"app", "moduleTask", "moduleNotice", "moduleProblem", "moduleWatchMan", "moduleMonitor", "ModuleInspection"})
 public class LibApplication extends Application {
     private static final String TAG = "Init";
     private static Context context;
     public static ImageLoader imageLoader = ImageLoader.getInstance();
     public LocationService locationService;
     public Vibrator mVibrator;
+    private boolean isMorning;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        isMorning = SharedUtil.getBoolean(this, "isMorning", true);
         /***
          * 初始化定位sdk，建议在Application中创建
          */
@@ -53,6 +57,7 @@ public class LibApplication extends Application {
         initCloudChannel(this);
         context = this;
         EventBus.getDefault().register(this);
+        initTimeMoring();
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.logo)//加载开始默认的图片
                 .showImageForEmptyUri(R.mipmap.logo)     //url爲空會显yg7示该图片
@@ -69,6 +74,14 @@ public class LibApplication extends Application {
                 .build();
         imageLoader.init(config2);
 
+    }
+
+    private void initTimeMoring() {
+        long morning = MyUtils.getTimeMorning();
+        if (isMorning) {
+            SharedUtil.setLong(this, "morningTime", morning);
+            SharedUtil.setBoolean(this, "isMorning", false);
+        }
     }
 
     public static Context getContent() {

@@ -190,7 +190,6 @@ public class ChatWarningActivity extends TakePhotoActivity implements View.OnCli
             problemDes = chat_add_problem_inputInfo.getText().toString().trim();
             String deviceUuid = new DeviceUuidFactory(ChatWarningActivity.this).getDeviceUuid().toString();
             time = getTime();
-            WMApplication wmApplication = (WMApplication) getApplication();
             getLatitude = SharedUtil.getString(ChatWarningActivity.this, "mylat");
             getLongitude = SharedUtil.getString(ChatWarningActivity.this, "mylon");
             Log.i("经纬度:", "告警页面,getLongitude:" + getLongitude + ",getLatitude:" + getLatitude);

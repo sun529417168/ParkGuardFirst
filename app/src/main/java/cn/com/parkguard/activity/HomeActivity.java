@@ -26,6 +26,7 @@ import com.linked.erfli.library.utils.NetWorkUtils;
 import com.linked.erfli.library.utils.SharedUtil;
 import com.linked.erfli.library.utils.StatusBarUtils;
 import com.linked.erfli.library.utils.ToastUtil;
+import com.linked.erfli.library.weight.ReportedGridview;
 
 import java.util.ArrayList;
 
@@ -47,9 +48,9 @@ import cn.com.watchman.utils.WMyUtils;
  */
 public class HomeActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private TextView netText;
-    private GridView gridView;
+    private ReportedGridview gridView;
     private LinearLayout setting;
-    private int image[] = {R.mipmap.home_task, R.mipmap.home_notice, R.mipmap.home_problem, R.mipmap.home_statistical, R.mipmap.home_xungeng, R.mipmap.home_anwen, R.mipmap.ic_map, R.mipmap.home_monitor};
+    private int image[] = {R.mipmap.home_task, R.mipmap.home_notice, R.mipmap.home_problem, R.mipmap.home_statistical, R.mipmap.home_xungeng, R.mipmap.home_anwen, R.mipmap.ic_map, R.mipmap.home_monitor, R.mipmap.home_anwen};
     private ArrayList<HomeBean> homeArrayList = new ArrayList<>();
     private HomeAdapter homeAdapter;
     private long exitTime;//上一次按退出键时间
@@ -97,7 +98,7 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
         } else {
             netText.setVisibility(View.VISIBLE);
         }
-        gridView = (GridView) findViewById(R.id.home_gridView);
+        gridView = (ReportedGridview) findViewById(R.id.home_gridView);
         homeAdapter = new HomeAdapter(this, homeArrayList);
         gridView.setAdapter(homeAdapter);
         gridView.setOnItemClickListener(this);
@@ -195,6 +196,9 @@ public class HomeActivity extends BaseActivity implements AdapterView.OnItemClic
                 ToastUtil.show(this, "正在开发中");
 //                SharedUtil.setBoolean(this, "isMonitor", true);
 //                Routers.open(HomeActivity.this, Uri.parse("modularization://monitor"));
+                break;
+            case 109:
+                Routers.open(HomeActivity.this, Uri.parse("modularization://inspection"));
                 break;
         }
     }

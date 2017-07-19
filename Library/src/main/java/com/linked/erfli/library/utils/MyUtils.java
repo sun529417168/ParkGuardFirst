@@ -344,4 +344,20 @@ public class MyUtils {
         }
         return versionName;
     }
+
+    /**
+     * stt
+     * 2016.8.29
+     * 方法说明：获取今天凌晨的时间戳
+     *
+     * @return Long
+     */
+    public static Long getTimeMorning() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis() / 1000;
+    }
 }

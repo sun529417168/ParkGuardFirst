@@ -46,5 +46,11 @@
         "name": "视频监控",
         "isTrue": false,
         "imageView": 0
-      }
+      },
+      {
+        "id": 109,
+        "name": "巡检",
+        "isTrue": false,
+        "imageView": 0
+       }
 ]

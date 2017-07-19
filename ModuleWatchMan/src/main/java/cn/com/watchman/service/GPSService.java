@@ -63,6 +63,13 @@ public class GPSService extends Service implements MyChatBroadcasReceiver.MyBroa
                 dinatesDao.delete(bean.getId());
             }
         }
+        long morning = SharedUtil.getLong(this, "morningTime", 0);
+        long now = System.currentTimeMillis() / 1000;
+        if (now < morning || now > (morning + 60 * 60 * 24)) {
+            SharedUtil.setInteger(this, "totalCount", 0);
+            SharedUtil.setBoolean(this, "isMorning", true);
+        }
+
     }
 
     @Override
