@@ -26,6 +26,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.linked.erfli.library.base.BaseActivity;
 import com.linked.erfli.library.utils.SharedUtil;
@@ -44,6 +45,7 @@ import cn.com.watchman.utils.Distance;
 import cn.com.watchman.utils.MyRequest;
 import cn.com.watchman.utils.PointsUtil;
 import cn.com.watchman.utils.SensorEventHelper;
+import cn.com.watchman.utils.Util;
 import cn.com.watchman.utils.WMyUtils;
 
 /**
@@ -77,6 +79,8 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
     private int[] compareBic = {300, 600, 1200, 2400, 4800};
     private int[] compareCar = {500, 1500, 3000, 6000, 30000};
     protected ToggleButton togBtn;
+    private PolylineOptions mPolyoptions;
+    private Polyline mpolyline;
 
 
     @Override
@@ -89,6 +93,13 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
         mapView = (MapView) findViewById(R.id.move_map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         dinatesDao = new DinatesDaoImpl(this);
+        initpolyline();
+    }
+
+    private void initpolyline() {
+        mPolyoptions = new PolylineOptions();
+        mPolyoptions.width(18);
+        mPolyoptions.setCustomTexture(BitmapDescriptorFactory.fromResource(R.drawable.custtexture));
     }
 
     @Override
@@ -189,11 +200,13 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
      */
     protected void trajectory() {
         dinatesList = dinatesDao.rawQuery("select * from t_gps where time > ?", new String[]{WMyUtils.getTimesmorning()});
-
         if (dinatesList.size() > 0) {
             addPolylineInPlayGround();
             //实线的方法
             List<LatLng> points = readLatLngs();
+            if (points.size() < 2) {
+                return;
+            }
             LatLngBounds.Builder b = LatLngBounds.builder();
             for (int i = 0; i < points.size(); i++) {
                 b.include(points.get(i));
@@ -206,6 +219,9 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
 
             //虚线的方法
             List<LatLng> pointx = readLatLng();
+            if (pointx.size() < 2) {
+                return;
+            }
             LatLngBounds.Builder bx = LatLngBounds.builder();
             for (int i = 0; i < pointx.size(); i++) {
                 bx.include(pointx.get(i));
@@ -300,28 +316,26 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
                     addMarker(location);//添加定位图标
                     mSensorHelper.setCurrentMarker(mLocMarker);//定位图标旋转
                     aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
+                    trajectory();
                 } else {
                     mCircle.setCenter(location);
                     mCircle.setRadius(aMapLocation.getAccuracy());
                     mLocMarker.setPosition(location);
                     aMap.moveCamera(CameraUpdateFactory.changeLatLng(location));
-                }
-                if (isSend) {
-                    trajectory();
-                }
-
-                /**
-                 * 下边的逻辑是用来写当在地图界面的时候还在行走状态，路线要实时画出来
-                 */
-                GPSBean gpsBean = new GPSBean(aMapLocation.getLongitude(), aMapLocation.getLatitude());
-                if ((int) aMapLocation.getLongitude() != 0 || (int) aMapLocation.getLatitude() != 0) {
-                    if (Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) > 0 && Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) < 25) {
-                        if (Distance.isCompare(this, gpsBean)) {
-                            MyRequest.gpsRequest(this, gpsBean);
-                            dinatesDao.insert(new DinatesBean(aMapLocation.getLongitude(), aMapLocation.getLatitude(), System.currentTimeMillis() / 1000));
-                            SharedUtil.setString(this, "longitude", String.valueOf(aMapLocation.getLongitude()));
-                            SharedUtil.setString(this, "latitude", String.valueOf(aMapLocation.getLatitude()));
-                            trajectory();
+                    /**
+                     * 下边的逻辑是用来写当在地图界面的时候还在行走状态，路线要实时画出来
+                     */
+                    GPSBean gpsBean = new GPSBean(aMapLocation.getLongitude(), aMapLocation.getLatitude());
+                    if ((int) aMapLocation.getLongitude() != 0 || (int) aMapLocation.getLatitude() != 0) {
+                        if (Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) > 0 && Double.parseDouble(String.valueOf(aMapLocation.getAccuracy())) < 35) {
+                            if (Distance.isCompare(this, gpsBean)) {
+                                MyRequest.gpsRequest(this, gpsBean);
+                                dinatesDao.insert(new DinatesBean(aMapLocation.getLongitude(), aMapLocation.getLatitude(), System.currentTimeMillis() / 1000));
+                                SharedUtil.setString(this, "longitude", String.valueOf(aMapLocation.getLongitude()));
+                                SharedUtil.setString(this, "latitude", String.valueOf(aMapLocation.getLatitude()));
+                                mPolyoptions.add(location);
+                                redrawline();
+                            }
                         }
                     }
                 }
@@ -332,21 +346,16 @@ public abstract class MoveShowActivity extends BaseActivity implements LocationS
         }
     }
 
-    private void sendMessage(AMapLocation location) {
-        GPSBean gpsBean = new GPSBean(location.getLongitude(), location.getLatitude());
-        MyRequest.gpsRequest(this, gpsBean);
-        currentCount++;
-        totalCount = SharedUtil.getInteger(getApplicationContext(), "totalCount", 0) + 1;
-        SharedUtil.setInteger(getApplicationContext(), "totalCount", totalCount);
-        intent.putExtra("currentCount", currentCount);
-        intent.putExtra("totalCount", totalCount);
-        sendBroadcast(intent);
-        if (String.valueOf(location.getLatitude()).length() > 9 || String.valueOf(location.getLongitude()).length() > 10) {
-            dinatesDao.insert(new DinatesBean(location.getLongitude(), location.getLatitude(), System.currentTimeMillis() / 1000));
-            SharedUtil.setString(this, "longitude", String.valueOf(location.getLongitude()));
-            SharedUtil.setString(this, "latitude", String.valueOf(location.getLatitude()));
-            SharedUtil.setLong(this, "compareTime", System.currentTimeMillis() / 1000);
-            trajectory();
+    /**
+     * 实时轨迹画线
+     */
+    private void redrawline() {
+        if (mPolyoptions.getPoints().size() > 1) {
+            if (mpolyline != null) {
+                mpolyline.setPoints(mPolyoptions.getPoints());
+            } else {
+                mpolyline = aMap.addPolyline(mPolyoptions);
+            }
         }
     }
 
